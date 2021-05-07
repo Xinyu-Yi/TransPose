@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TransPose</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap-4.3.1.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="https://xinyu-yi.github.io/TransPose/">TransPose</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#video">Video</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#citation">Citation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+      
+    <div class="container mt-2">
+      <div class="row">
+        <div class="col-12">
+          <div class="container mt-5 mb-2">
+            <h1 class="text-center ">TransPose</h1>
+            <h4 class="text-center">Real-time 3D Human Translation and Pose Estimation with Six Inertial Sensors</h4>
+            <div class="text-center container mb-3">
+              <p>
+                Xinyu Yi<sup>1</sup>, <a href="https://calciferzh.github.io/">Yuxiao Zhou</a><sup>1</sup>, <a href="http://xufeng.site/">Feng Xu</a><sup>1</sup>
+                <br>
+                <sup>1</sup><a href="https://www.tsinghua.edu.cn/">Tsinghua University</a>, Beijing, China
+              </p>
+              <p><i>Accepted by <a href="https://s2021.siggraph.org/">SIGGRAPH 2021</a></i></p>
+            </div>
+            <img src="images/teaser.png" alt="" class="img-fluid mt-2 mb-2"> 
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    <div class="container">
+      <!--h2 class="text-center">Downloads</h2-->
+      <div class="row">
+        <div class="text-center col-md-6 col-12">
+          <!--h3>Paper</h3-->
+          <div class="container mb-2" style="width: 20%"><img src="images/paper.svg" alt="Download Paper" class="card-img"/></div>
+          <a class="btn btn-danger btn-lg" href="files/TransPose.pdf" role="button">Paper</a>
+        </div>
+        <div class="text-center col-md-6 col-12">
+          <!--h3>Video</h3-->
+          <div class="container mb-2" style="width: 20%"><img src="images/video.svg" alt="Download Video" class="card-img"/></div>    
+          <a class="btn btn-info btn-lg" href="videos/camera ready.mp4" role="button">Video</a>
+        </div>
+      </div><hr>
+    </div>
+    
+    <div class="container">
+      <h2 class="text-center">Abstract</h2>
+      <div class="container">
+        <p>
+          Motion capture is facing some new possibilities brought by the inertial
+          sensing technologies which do not suffer from occlusion or wide-range
+          recordings as vision-based solutions do. However, as the recorded signals are
+          sparse and quite noisy, online performance and global translation estimation
+          turn out to be two key difficulties. In this paper, we present TransPose, a 
+          DNN-based approach to perform full motion capture (with both global translations
+          and body poses) from only 6 Inertial Measurement Units (IMUs) at over 90 fps.
+          For body pose estimation, we propose a multi-stage network that estimates
+          leaf-to-full joint positions as intermediate results. This design makes the pose
+          estimation much easier, and thus achieves both better accuracy and lower
+          computation cost. For global translation estimation, we propose a
+          supporting-foot-based method and an RNN-based method to robustly solve for the global
+          translations with a confidence-based fusion technique. Quantitative and
+          qualitative comparisons show that our method outperforms the state-of-the-art
+          learning- and optimization-based methods with a large margin in both accuracy
+          and efficiency. As a purely inertial sensor-based approach, our
+          method is not limited by environmental settings (e.g., fixed cameras), making
+          the capture free from common difficulties such as wide-range motion space
+          and strong occlusion.
+        </p>
+      </div>
+      <hr>
+    </div>
+      
+    <div class="container" id="video">
+      <h2 class="text-center">Video</h2>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="embed-responsive embed-responsive-16by9">
+              <video controls>
+                <source src="videos/camera ready.mp4" type="video/mp4">
+              </video>
+              <!--iframe class="embed-responsive-item" src="videos/camera ready.mp4"></iframe-->
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+    </div>
+      
+    <div class="container" id="citation">
+      <h2 class="text-center">Citation</h2>
+      <div class="container bg-light pt-3">
+        <pre class="mb-3 ml-3">
+@article{TransPoseSIGGRAPH2021,
+    author = {Yi, Xinyu and Zhou, Yuxiao and Xu, Feng},
+    title = {TransPose: Real-time 3D Human Translation and Pose Estimation with Six Inertial Sensors},
+    journal = {ACM Transactions on Graphics}, 
+    year = {2021}, 
+    month = {08},
+    volume = {40},
+    number = {4}, 
+    articleno = {86},
+    publisher = {ACM}
+} 
+        </pre>
+      </div>
+      <hr>
+    </div>
+      
+    <div class="container" id="acknowledgments">
+      <h2 class="text-center">Acknowledgments</h2>
+      <div class="container">
+          <p>We would like to thank Yinghao Huang and the other DIP authors
+          for providing the SMPL parameters for TotalCapture dataset and the
+          SIP/SOP results. We would also like to thank Associate Professor
+          Yebin Liu for the support on the IMU sensors. We also appreciate
+          Hao Zhang, Dong Yang, Wenbin Lin, and Rui Qin for the extensive 
+          help with the live demos. We thank Chengwei Zheng for the
+          proofreading, and the reviewers for their valuable comments. This
+          work was supported by the National Key R&amp;D Program of China
+          2018YFA0704000, the NSFC (No.61822111, 61727808) and Beijing
+          Natural Science Foundation (JQ19015). Feng Xu is the corresponding
+          author.</p>
+      </div>
+      <hr>
+    </div>
+   
+    <div class="container" id="contact">
+      <h2 class="text-center">Contact Us</h2>
+      <div class="row">
+        <div class="col-lg-9 col-md-6 col-sm-6 mb-md-0 mb-2">
+          <address>
+            <strong>Tsinghua University</strong><br>
+            Beijing, China<br>
+            E-mail: <a href="mailto:yixy20@mails.tsinghua.edu.cn">yixy20@mails.tsinghua.edu.cn</a>
+          </address>
+        </div>
+        <div class="col-lg-3 col-12">
+          <a href="https://www.tsinghua.edu.cn/"><img src="images/tsinghua.jpg" alt="Tsinghua University" class="card-img-bottom"></a>
+        </div>
+      </div>
+    </div>
+    <hr> 
+      
+    <footer class="text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <p>Copyright © Xinyu Yi. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+      
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap-4.3.1.js"></script>
+  </body>
+</html>
