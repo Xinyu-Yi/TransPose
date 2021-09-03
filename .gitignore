@@ -1,0 +1,6 @@
+data/
+models/
+a.mp4
+venv/
+.idea/
+__pycache__/
