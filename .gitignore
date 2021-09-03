@@ -1,0 +1,7 @@
+models/
+venv/
+.idea/
+*.mp4
+data/dataset_raw
+data/dataset_work
+data/weights.pt
