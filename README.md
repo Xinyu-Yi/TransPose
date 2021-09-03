@@ -2,7 +2,7 @@
 
 Codes for our SIGGRAPH 2021 [paper](https://xinyu-yi.github.io/TransPose/files/TransPose.pdf) "TransPose: Real-time 3D Human Translation and Pose Estimation with Six Inertial Sensors". This repository contains the system implementation, evaluation, and some example IMU data which you can easily run with. [Project Page](https://xinyu-yi.github.io/TransPose/)
 
-
+![Live Demo 1](https://xinyu-yi.github.io/TransPose/images/1.gif)![Live Demo 2](https://xinyu-yi.github.io/TransPose/images/2.gif)
 
 ## Usage
 
@@ -17,13 +17,13 @@ We use `python 3.7.6`. You should install the newest `pytorch chumpy vctoolkit o
 
 ### Prepare pre-trained network weights
 
-1. Download weights from [here]().
+1. Download weights from [here](https://xinyu-yi.github.io/TransPose/files/weights.pt).
 2. In `config.py`, set `paths.weights_file` to the weights path.
 
 ### Prepare test datasets (optional)
 
 1. Download DIP-IMU dataset from [here](https://dip.is.tue.mpg.de/). We use the raw (unnormalized) data.
-2. Download TotalCapture dataset from [here](https://cvssp.org/data/totalcapture/). The ground-truth SMPL poses used in our evaluation are provided by the DIP authors. So you also need to acquire them from the DIP authors.
+2. Download TotalCapture dataset from [here](https://cvssp.org/data/totalcapture/). The ground-truth SMPL poses used in our evaluation are provided by the DIP authors. So you may also need to contact the DIP authors for them.
 3. In `config.py`, set `paths.raw_dipimu_dir` to the DIP-IMU dataset path; set `paths.raw_totalcapture_dip_dir` to the TotalCapture SMPL poses (from DIP authors) path; and set `paths.raw_totalcapture_official_dir` to the TotalCapture official `gt` path. Please refer to the comments in the codes for more details.
 
 ### Run the example
@@ -45,9 +45,7 @@ python preprocess.py
 python evaluate.py
 ```
 
-Both offline and online results will be shown for DIP-IMU and TotalCapture test datasets.
-
-
+Both offline and online results for DIP-IMU and TotalCapture test datasets will be printed.
 
 ## Citation
 
