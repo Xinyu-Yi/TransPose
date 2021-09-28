@@ -1,6 +1,6 @@
 # TransPose
 
-Codes for our SIGGRAPH 2021 [paper](https://xinyu-yi.github.io/TransPose/files/TransPose.pdf) "TransPose: Real-time 3D Human Translation and Pose Estimation with Six Inertial Sensors". This repository contains the system implementation, evaluation, and some example IMU data which you can easily run with. [Project Page](https://xinyu-yi.github.io/TransPose/)
+Code for our SIGGRAPH 2021 [paper](https://xinyu-yi.github.io/TransPose/files/TransPose.pdf) "TransPose: Real-time 3D Human Translation and Pose Estimation with Six Inertial Sensors". This repository contains the system implementation, evaluation, and some example IMU data which you can easily run with. [Project Page](https://xinyu-yi.github.io/TransPose/)
 
 ![Live Demo 1](data/figures/1.gif)![Live Demo 2](data/figures/2.gif)
 
