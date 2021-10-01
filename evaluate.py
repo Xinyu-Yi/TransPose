@@ -46,7 +46,6 @@ def evaluate_pose(dataset, num_past_frame=20, num_future_frame=5):
         pose_t, tran_t = y
         offline_errs.append(evaluator.eval(pose_p_offline, pose_t))
         online_errs.append(evaluator.eval(pose_p_online, pose_t))
-        break
     print('============== offline ================')
     evaluator.print(torch.stack(offline_errs).mean(dim=0))
     print('============== online ================')
