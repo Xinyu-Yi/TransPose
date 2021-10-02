@@ -50,7 +50,7 @@ def process_totalcapture():
     file_name = 'gt_skel_gbl_pos.txt'
 
     accs, oris, poses, trans = [], [], [], []
-    for file in os.listdir(paths.raw_totalcapture_dip_dir):
+    for file in sorted(os.listdir(paths.raw_totalcapture_dip_dir)):
         data = pickle.load(open(os.path.join(paths.raw_totalcapture_dip_dir, file), 'rb'), encoding='latin1')
         ori = torch.from_numpy(data['ori']).float()[:, torch.tensor([2, 3, 0, 1, 4, 5])]
         acc = torch.from_numpy(data['acc']).float()[:, torch.tensor([2, 3, 0, 1, 4, 5])]
@@ -69,7 +69,7 @@ def process_totalcapture():
         poses.append(pose)  # N, 24, 3
 
     for subject_name in ['S1', 'S2', 'S3', 'S4', 'S5']:
-        for motion_name in os.listdir(os.path.join(paths.raw_totalcapture_official_dir, subject_name)):
+        for motion_name in sorted(os.listdir(os.path.join(paths.raw_totalcapture_official_dir, subject_name))):
             if subject_name == 'S5' and motion_name == 'acting3':
                 continue   # no SMPL poses
             f = open(os.path.join(paths.raw_totalcapture_official_dir, subject_name, motion_name, file_name))
