@@ -4,6 +4,8 @@ Code for our SIGGRAPH 2021 [paper](https://xinyu-yi.github.io/TransPose/files/Tr
 
 ![Live Demo 1](data/figures/1.gif)![Live Demo 2](data/figures/2.gif)
 
+*Note： I have put the live demo codes in the `dirty code/`. It contains sensor calibration details.*
+
 ## Usage
 
 ### Install dependencies
