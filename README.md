@@ -4,13 +4,15 @@ Code for our SIGGRAPH 2021 [paper](https://xinyu-yi.github.io/TransPose/files/Tr
 
 ![Live Demo 1](data/figures/1.gif)![Live Demo 2](data/figures/2.gif)
 
-*Note： I have put the live demo codes in the `dirty code/`. It contains sensor calibration details.*
-
 ## Usage
 
 ### Install dependencies
 
 We use `python 3.7.6`. You should install the newest `pytorch chumpy vctoolkit open3d`.
+
+*If the newest `vctoolkit` reports errors, please use `vctoolkit==0.1.5.39`.*
+
+*Installing `pytorch` with CUDA is recommended. The system can only run at ~40 fps on a CPU (i7-8700) and ~90 fps on a GPU (GTX 1080Ti).*
 
 ### Prepare SMPL body model
 
@@ -25,7 +27,7 @@ We use `python 3.7.6`. You should install the newest `pytorch chumpy vctoolkit o
 ### Prepare test datasets (optional)
 
 1. Download DIP-IMU dataset from [here](https://dip.is.tue.mpg.de/). We use the raw (unnormalized) data.
-2. Download TotalCapture dataset from [here](https://cvssp.org/data/totalcapture/). The ground-truth SMPL poses used in our evaluation are provided by the DIP authors. So you may also need to contact the DIP authors for them.
+2. Download TotalCapture dataset from [here](https://cvssp.org/data/totalcapture/). You need to download `the real world position and orientation` under `Vicon Groundtruth` in the website and unzip them. The ground-truth SMPL poses used in our evaluation are provided by the DIP authors. So you may also need to contact the DIP authors for them.
 3. In `config.py`, set `paths.raw_dipimu_dir` to the DIP-IMU dataset path; set `paths.raw_totalcapture_dip_dir` to the TotalCapture SMPL poses (from DIP authors) path; and set `paths.raw_totalcapture_official_dir` to the TotalCapture official `gt` path. Please refer to the comments in the codes for more details.
 
 ### Run the example
@@ -48,6 +50,35 @@ python evaluate.py
 ```
 
 Both offline and online results for DIP-IMU and TotalCapture test datasets will be printed.
+
+### Run your live demo
+
+We provide `live_demo.py` which uses NOTIOM Legacy IMU sensors. This file contains sensor calibration details which may be useful for you.
+
+```
+python live_demo.py
+```
+
+The estimated poses and translations are sent to Unity3D for visualization using a socket in real-time. You may need to write a client to receive these data to run the live demo codes (or modify the codes a bit).
+
+### Synthesize AMASS dataset
+
+Prepare the raw AMASS dataset and modify `config.py` accordingly. Then, uncomment the `process_amass()` in `preprocess.py` and run:
+
+```
+python preprocess.py
+```
+
+The saved files are:
+
+- `joint.pt`, which contains a list of tensors in shape [#frames, 24, 3] for 24 absolute joint 3D positions.
+- `pose.pt`, which contains a list of tensors in shape [#frames, 24, 3] for 24 relative joint rotations (in axis-angles).
+- `shape.pt`, which contains a list of tensors in shape [10] for the subject shape (SMPL parameter).
+- `tran.pt`, which contains a list of tensors in shape [#frames, 3] for the global (root) 3D positions.
+- `vacc.pt`, which contains a list of tensors in shape [#frames, 6, 3] for 6 synthetic IMU acceleration measurements (global).
+- `joint.pt`, which contains a list of tensors in shape [#frames, 6, 3, 3] for 6 synthetic IMU orientation measurements (global).
+
+All sequences are in 60 fps.
 
 ## Citation
 

@@ -1,21 +1,25 @@
 import socket
 import threading
-from utils import *
+from articulate.math import *
 from datetime import datetime
 import torch
 import numpy as np
 import config
 import time
-from net import InertialPoser
+from net import TransPoseNet
 from pygame.time import Clock
 
 
-inertial_poser = InertialPoser(num_past_frame=20, num_future_frame=5).to(config.device)
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+inertial_poser = TransPoseNet(num_past_frame=20, num_future_frame=5).to(device)
 running = False
 start_recording = False
 
 
 class IMUSet:
+    r"""
+    Sensor order: left forearm, right forearm, left lower leg, right lower leg, head, pelvis
+    """
     def __init__(self, imu_host='127.0.0.1', imu_port=7002, buffer_len=26):
         """
         Init an IMUSet for Noitom Perception Legacy IMUs. Please follow the instructions below.
@@ -57,8 +61,8 @@ class IMUSet:
                 # print(np.array(strs[:-3]).reshape((21, 16)))  # full data
                 d = np.array(strs[:96]).reshape((6, 16))  # first 6 imus
                 tranc = int(len(self._quat_buffer) == self._buffer_len)
-                self._quat_buffer = self._quat_buffer[tranc:] + [d[:, 6:10].astype(np.float)]
-                self._acc_buffer = self._acc_buffer[tranc:] + [-d[:, 10:13].astype(np.float) * 9.8]
+                self._quat_buffer = self._quat_buffer[tranc:] + [d[:, 6:10].astype(float)]
+                self._acc_buffer = self._acc_buffer[tranc:] + [-d[:, 10:13].astype(float) * 9.8]
                 data = strs[-1]
                 self.clock.tick()
 
@@ -136,7 +140,7 @@ if __name__ == '__main__':
     input('Put imu 1 aligned with your body reference frame (x = Left, y = Up, z = Forward) and then press any key.')
     print('Keep for 3 seconds ...', end='')
     oris = imu_set.get_mean_measurement_of_n_second(num_seconds=3, buffer_len=200)[0][0]
-    smpl2imu = quaternion_to_rotation_matrix_batch(oris).view(3, 3).t()
+    smpl2imu = quaternion_to_rotation_matrix(oris).view(3, 3).t()
 
     input('\tFinish.\nWear all imus correctly and press any key.')
     for i in range(3, 0, -1):
@@ -144,7 +148,7 @@ if __name__ == '__main__':
         time.sleep(1)
     print('\rStand straight in T-pose. Keep the pose for 3 seconds ...', end='')
     oris, accs = imu_set.get_mean_measurement_of_n_second(num_seconds=3, buffer_len=200)
-    oris = quaternion_to_rotation_matrix_batch(oris)
+    oris = quaternion_to_rotation_matrix(oris)
     device2bone = smpl2imu.matmul(oris).transpose(1, 2).matmul(torch.eye(3))
     acc_offsets = smpl2imu.matmul(accs.unsqueeze(-1))   # [num_imus, 3, 1], already in global inertial frame
 
@@ -170,16 +174,16 @@ if __name__ == '__main__':
         # calibration
         clock.tick(60)
         ori_raw, acc_raw = imu_set.get_current_buffer()   # [1, 6, 4], get measurements in running fps
-        ori_raw = quaternion_to_rotation_matrix_batch(ori_raw).view(1, 6, 3, 3)
+        ori_raw = quaternion_to_rotation_matrix(ori_raw).view(1, 6, 3, 3)
         acc_cal = (smpl2imu.matmul(acc_raw.view(-1, 6, 3, 1)) - acc_offsets).view(1, 6, 3)
         ori_cal = smpl2imu.matmul(ori_raw).matmul(device2bone)
 
         # normalization
         acc = torch.cat((acc_cal[:, :5] - acc_cal[:, 5:], acc_cal[:, 5:]), dim=1).bmm(ori_cal[:, -1]) / config.acc_scale
         ori = torch.cat((ori_cal[:, 5:].transpose(2, 3).matmul(ori_cal[:, :5]), ori_cal[:, 5:]), dim=1)
-        data_nn = torch.cat((acc.view(-1, 18), ori.view(-1, 54)), dim=1).to(config.device)
-        pose, vel = inertial_poser.forward_online(data_nn)
-        pose = rotation_matrix_to_axis_angle_batch(pose.view(1, 216)).view(72)
+        data_nn = torch.cat((acc.view(-1, 18), ori.view(-1, 54)), dim=1).to(device)
+        pose, tran = inertial_poser.forward_online(data_nn)
+        pose = rotation_matrix_to_axis_angle(pose.view(1, 216)).view(72)
 
         # recording
         if not is_recording and start_recording:
@@ -193,8 +197,8 @@ if __name__ == '__main__':
 
         # send pose
         s = ','.join(['%g' % v for v in pose]) + '#' + \
-            ','.join(['%g' % v for v in vel]) + '$'
-        conn.send(s.encode('utf8'))
+            ','.join(['%g' % v for v in tran]) + '$'
+        conn.send(s.encode('utf8'))  # I use unity3d to read pose and translation for visualization here
 
         print('\r', '(recording)' if is_recording else '', 'Sensor FPS:', imu_set.clock.get_fps(),
               '\tOutput FPS:', clock.get_fps(), end='')

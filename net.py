@@ -117,7 +117,7 @@ class TransPoseNet(torch.nn.Module):
         Offline forward.
 
         :param imu: Tensor in shape [num_frame, input_dim(6 * 3 + 6 * 9)].
-        :return: Pose tensor in shape [num_frame, 24, 3, 3] and velocity tensor in shape [num_frame, 3].
+        :return: Pose tensor in shape [num_frame, 24, 3, 3] and translation tensor in shape [num_frame, 3].
         """
         _, _, global_reduced_pose, contact_probability, velocity, _ = self.forward(imu)
 
@@ -154,7 +154,7 @@ class TransPoseNet(torch.nn.Module):
         Online forward.
 
         :param x: A tensor in shape [input_dim(6 * 3 + 6 * 9)].
-        :return: Pose tensor in shape [24, 3, 3] and velocity tensor in shape [3].
+        :return: Pose tensor in shape [24, 3, 3] and translation tensor in shape [3].
         """
         imu = x.repeat(self.num_total_frame, 1) if self.imu is None else torch.cat((self.imu[1:], x.view(1, -1)))
         _, _, global_reduced_pose, contact_probability, velocity, self.rnn_state = self.forward(imu, self.rnn_state)
