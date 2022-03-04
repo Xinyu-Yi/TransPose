@@ -80,6 +80,12 @@ The saved files are:
 
 All sequences are in 60 fps.
 
+### Visualize the result in Unity3D
+
+1. Download the unity package from [here](https://xinyu-yi.github.io/TransPose/files/visualizer.unitypackage).
+2. Load the package in Unity3D (>=2019.4.16) and open the `Example` scene.
+3. Run `example_server.py`. Wait till the server starts. Then play the unity scene.
+
 ## Citation
 
 If you find the project helpful, please consider citing us:
