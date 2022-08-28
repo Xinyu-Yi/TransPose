@@ -80,6 +80,8 @@ The saved files are:
 
 All sequences are in 60 fps.
 
+*Please note that these synthesized data should not be directly used in training. They need normalization/coordinate frame transformation according to the paper.*
+
 ### Visualize the result in Unity3D
 
 1. Download the unity package from [here](https://xinyu-yi.github.io/TransPose/files/visualizer.unitypackage).
