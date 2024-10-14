@@ -163,7 +163,7 @@ The saved files are:
 - `shape.pt`, which contains a list of tensors in shape [10] for the subject shape (SMPL parameter).
 - `tran.pt`, which contains a list of tensors in shape [#frames, 3] for the global (root) 3D positions.
 - `vacc.pt`, which contains a list of tensors in shape [#frames, 6, 3] for 6 synthetic IMU acceleration measurements (global).
-- `joint.pt`, which contains a list of tensors in shape [#frames, 6, 3, 3] for 6 synthetic IMU orientation measurements (global).
+- `vrot.pt`, which contains a list of tensors in shape [#frames, 6, 3, 3] for 6 synthetic IMU orientation measurements (global).
 
 All sequences are in 60 fps.
 
