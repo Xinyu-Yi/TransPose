@@ -38,7 +38,7 @@ def process_amass(smooth_n=4):
     data_pose, data_trans, data_beta, length = [], [], [], []
     for ds_name in amass_data:
         print('\rReading', ds_name)
-        for npz_fname in tqdm(glob.glob(os.path.join(paths.raw_amass_dir, ds_name, ds_name, '*/*_poses.npz'))):
+        for npz_fname in tqdm(glob.glob(os.path.join(paths.raw_amass_dir, ds_name, '*/*_poses.npz'))):
             try: cdata = np.load(npz_fname)
             except: continue
 
