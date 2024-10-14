@@ -14,20 +14,107 @@ We use `python 3.7.6`. You should install the newest `pytorch chumpy vctoolkit o
 
 *Installing `pytorch` with CUDA is recommended. The system can only run at ~40 fps on a CPU (i7-8700) and ~90 fps on a GPU (GTX 1080Ti).*
 
+```
+conda create -n "imuposer" python=3.7
+conda activate imuposer
+conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=10.2 -c pytorch
+
+python -m pip install -r requirements.txt
+python -m pip install -e src/
+```
+
+We use <ROOT> to refer to the root path of this repository in your file system. Prepare folders in the following format:
+```
+<ROOT>
+    └── TransPose
+        └── data
+            └── dataset_raw
+```
+
 ### Prepare SMPL body model
 
-1. Download SMPL model from [here](https://smpl.is.tue.mpg.de/). You should click `SMPL for Python` and download the `version 1.0.0 for Python 2.7 (10 shape PCs)`. Then unzip it.
+1. Register an account in https://smpl.is.tue.mpg.de/download.php. Click on ```Download version 1.0.0 for Python 2.7 (female/male. 10 shape PCs)```. The ```SMPL_python_v.1.0.0.zip``` file will be downloaded. Put it in ```<ROOT>/TransPose/data/dataset_raw```.
+
+```
+<ROOT>/data/dataset_raw$ unzip SMPL_python_v.1.0.0.zip
+rm -r __MACOSX/
+rm -r SMPL_python_v.1.0.0.zip
+<ROOT>/data/dataset_raw$ mv smpl/models ../../
+<ROOT>/data/dataset_raw$ rm -r smpl/
+```
 2. In `config.py`, set `paths.smpl_file` to the model path.
 
 ### Prepare pre-trained network weights
 
 1. Download weights from [here](https://xinyu-yi.github.io/TransPose/files/weights.pt).
+```
+<ROOT>/data/dataset_raw$ wget https://xinyu-yi.github.io/TransPose/files/weights.pt
+<ROOT>/data/dataset_raw$ mv weights.pt ..
+```
 2. In `config.py`, set `paths.weights_file` to the weights path.
 
 ### Prepare test datasets (optional)
 
-1. Download DIP-IMU dataset from [here](https://dip.is.tue.mpg.de/). We use the raw (unnormalized) data.
-2. Download TotalCapture dataset from [here](https://cvssp.org/data/totalcapture/). You need to download `the real world position and orientation` under `Vicon Groundtruth` in the website and unzip them. The ground-truth SMPL poses used in our evaluation are provided by the DIP authors. So you may also need to contact the DIP authors for them.
+1. Register an account and download DIP-IMU dataset from [here](https://dip.is.tue.mpg.de/). Click on  ```DIP IMU AND OTHERS - DOWNLOAD SERVER 1 ```  (approx. 2.5GB). We use the raw (unnormalized) data.
+```
+<ROOT>/data/dataset_raw$ unzip DIPIMUandOthers.zip
+<ROOT>/data/dataset_raw$ rm DIPIMUandOthers.zip
+<ROOT>/data/dataset_raw/DIP_IMU_and_Others$ unzip DIP_IMU.zip
+<ROOT>/data/dataset_raw/DIP_IMU_and_Others$ mv DIP_IMU ..
+<ROOT>/data/dataset_raw$ rm -r DIP_IMU_and_Others
+```
+Follow ```Prepare AMASS and DIP_IMU``` or ```3. Download training data``` from https://github.com/bryanbocao/IMUPoser/blob/main/README.md to download dataset AMASS.
+
+2. Download TotalCapture dataset from https://cvssp.org/data/totalcapture/data. Select ```Vicon Groundtruth - The real world position and orinetation```
+The following 5 subjects' data (```Subject1 Subject2 Subject3 Subject4 Subject5```) files will be downloaded:
+```
+s1_vicon_pos_ori.tar.gz
+s2_vicon_pos_ori.tar.gz
+s3_vicon_pos_ori.tar.gz
+s4_vicon_pos_ori.tar.gz
+s5_vicon_pos_ori.tar.gz
+```
+Put them into this folder: ```<ROOT>/data/dataset_raw/TotalCapture/official```. Untar the files by
+```
+<ROOT>/data/dataset_raw/TotalCapture/official$ for file in *.tar.gz; do tar -xvzf "$file" -C .; done
+<ROOT>/data/dataset_raw/TotalCapture/official$ rm -r s2
+<ROOT>/data/dataset_raw/TotalCapture/official$ rm -r *.tar.gz
+```
+
+Where to find the ```DIP_recalculate``` data:
+
+https://github.com/Xinyu-Yi/TransPose/blob/4963e71ae33c3ea5ac24fcc053015804e9705ad1/config.py#L21
+```
+    # DIP recalculates the SMPL poses for TotalCapture dataset. You should acquire the pose data from the DIP authors.
+    raw_totalcapture_dip_dir = 'data/dataset_raw/TotalCapture/DIP_recalculate'  # contain ground-truth SMPL pose (*.pkl)
+```
+Load ground-truth SMPL poses and IMUs from the TotalCapture dataset.
+
+Pointers:
+```
+https://github.com/eth-ait/dip18?tab=readme-ov-file
+https://github.com/eth-ait/aitviewer/blob/main/examples/load_DIP_TC.py
+https://github.com/eth-ait/aitviewer/blob/8fb6d4661303579ef04b3bf63ac907dbaecff2ff/examples/load_DIP_TC.py#L14
+```
+
+From https://dip.is.tue.mpg.de/download.php, select ```ORIGINAL TotalCapture DATA W/ CORRESPONDING REFERENCE SMPL Poses (wo/ normalization, approx. 250MB)```. The file named ```TotalCapture_Real_60FPS.zip``` will be downloaded.
+```
+<ROOT>/data/dataset_raw/TotalCapture/DIP_recalculate$ unzip TotalCapture_Real_60FPS.zip
+Archive:  TotalCapture_Real_60FPS.zip
+   creating: TotalCapture_Real_60FPS/
+  inflating: TotalCapture_Real_60FPS/s4_acting3.pkl
+  inflating: TotalCapture_Real_60FPS/s5_freestyle3.pkl
+  inflating: TotalCapture_Real_60FPS/s3_freestyle3.pkl
+  inflating: TotalCapture_Real_60FPS/s3_acting2.pkl
+  inflating: TotalCapture_Real_60FPS/s1_rom3.pkl
+  ...
+<ROOT>/data/dataset_raw/TotalCapture/DIP_recalculate$ rm TotalCapture_Real_60FPS.zip
+<ROOT>/data/dataset_raw/TotalCapture/DIP_recalculate$ mv TotalCapture_Real_60FPS/* .
+<ROOT>/data/dataset_raw/TotalCapture/DIP_recalculate$ rm -r TotalCapture_Real_60FPS
+```
+
+The ground-truth SMPL poses used in our evaluation are provided by the DIP authors. So you may also need to contact the DIP authors for them.
+
 3. In `config.py`, set `paths.raw_dipimu_dir` to the DIP-IMU dataset path; set `paths.raw_totalcapture_dip_dir` to the TotalCapture SMPL poses (from DIP authors) path; and set `paths.raw_totalcapture_official_dir` to the TotalCapture official `gt` path. Please refer to the comments in the codes for more details.
 
 ### Run the example
