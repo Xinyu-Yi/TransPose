@@ -44,3 +44,12 @@ class joint_set:
 
 acc_scale = 30
 vel_scale = 3
+
+class train:
+    '''
+    Batch size of 256 using an Adam [Kingma and Ba 2014] optimizer with a learning rate lr = 10−3 from the paper.
+    '''
+    epochs = 3000
+    batch_size = 256
+    learning_rate = 10e-3
+    optimizer_str = 'Adam'
