@@ -63,7 +63,7 @@ rm -r SMPL_python_v.1.0.0.zip
 <ROOT>/data/dataset_raw/DIP_IMU_and_Others$ mv DIP_IMU ..
 <ROOT>/data/dataset_raw$ rm -r DIP_IMU_and_Others
 ```
-Follow ```Prepare AMASS and DIP_IMU``` or ```3. Download training data``` from https://github.com/bryanbocao/IMUPoser/blob/main/README.md to download dataset AMASS.
+Follow ```Prepare AMASS and DIP_IMU``` or ```3. Download training data``` from https://github.com/bryanbocao/IMUPoser/blob/main/README.md to download dataset AMASS. Note that the ```<ROOT>/data/raw``` in the IMUPoser should be changed to ```<ROOT>/data/dataset_raw``` in this repository.
 
 2. Download TotalCapture dataset from https://cvssp.org/data/totalcapture/data. Select ```Vicon Groundtruth - The real world position and orinetation```
 The following 5 subjects' data (```Subject1 Subject2 Subject3 Subject4 Subject5```) files will be downloaded:
@@ -77,7 +77,6 @@ s5_vicon_pos_ori.tar.gz
 Put them into this folder: ```<ROOT>/data/dataset_raw/TotalCapture/official```. Untar the files by
 ```
 <ROOT>/data/dataset_raw/TotalCapture/official$ for file in *.tar.gz; do tar -xvzf "$file" -C .; done
-<ROOT>/data/dataset_raw/TotalCapture/official$ rm -r s2
 <ROOT>/data/dataset_raw/TotalCapture/official$ rm -r *.tar.gz
 ```
 
